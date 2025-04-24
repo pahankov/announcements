@@ -8,8 +8,8 @@ class AdvertisementSerializer(serializers.ModelSerializer):
         read_only_fields = ['creator', 'created_at']
 
     def validate(self, data):
-        if self.instance is None and data.get('status') == 'OPEN':
+        if self.instance is None and data.get('status') == Advertisement.STATUS_OPEN:
             user = self.context['request'].user
-            if Advertisement.objects.filter(creator=user, status='OPEN').count() >= 10:
+            if Advertisement.objects.filter(creator=user, status=Advertisement.STATUS_OPEN).count() >= 10:
                 raise serializers.ValidationError("Нельзя иметь больше 10 открытых объявлений.")
         return data
